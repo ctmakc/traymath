@@ -8,7 +8,7 @@ status: approved
 A party food planner that checks every guest can eat, then hands the caterer an order they can cook from.
 
 ## The Unique Kernel
-TrayMath counts food per diet, not per head. A platter that feeds the vegans cannot also feed the gluten-free guests if it is the same 24 pieces, and TrayMath catches that double counting: it proves (or disproves) that every group of guests can be fed from food they can eat at the same time. If any group is short, it says which group, by how many pieces, and which platter would fix it.
+TrayMath counts food per diet. A platter that feeds the vegans cannot also feed the gluten-free guests if it is the same 24 pieces, and TrayMath catches that double counting: it proves (or disproves) that every group of guests can be fed from food they can eat at the same time. If any group is short, it says which group, by how many pieces, and which platter would fix it.
 
 ## Who It's For
 Two people on either side of one catering order.

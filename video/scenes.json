@@ -1,0 +1,38 @@
+[
+  {
+    "id": "s1-problem",
+    "say": "Catering orders usually start like this: thirty people, a few vegetarians, one gluten-free. The kitchen guesses, and the guest with two restrictions ends up with two crackers."
+  },
+  {
+    "id": "s2-party",
+    "say": "TrayMath is a party platter planner a small caterer can share with hosts. This office party has thirty guests: three vegetarians, two vegans, and one vegan guest who also avoids gluten."
+  },
+  {
+    "id": "s3-plan",
+    "say": "One click plans the trays from the caterer's menu. Every group is covered. Each plate is one guest, and every row shows which trays feed that group."
+  },
+  {
+    "id": "s4-kernel",
+    "say": "Now the part a quick headcount gets wrong. I take away the fruit skewers and the falafel. The vegan gluten-free guest still has twenty-eight pieces on the table she can eat, for the ten she needs. The two vegans need those same trays, though. Shared out properly, eight pieces are hers, and she is short."
+  },
+  {
+    "id": "s5-fix",
+    "say": "TrayMath shares out every tray with a max-flow allocation, most restricted guests first, so a tray is never counted twice. It suggests fixes. One click, and she is covered again."
+  },
+  {
+    "id": "s6-send",
+    "say": "One more fix for the other guests, and everyone is covered. The host adds a name, a date and a note, and sends the order. The link is the order: no account, no server, nothing stored."
+  },
+  {
+    "id": "s7-ticket",
+    "say": "The caterer opens a kitchen ticket: how many of each tray, what each one contains, and which guests each tray feeds."
+  },
+  {
+    "id": "s8-labels",
+    "say": "It also prints folding table labels for the buffet, with the diets each dish suits and its allergens."
+  },
+  {
+    "id": "s9-built",
+    "say": "I planned and built it with the Devpost Learn Skill Pack: scope, product requirements and a technical spec first, then five tested build slices. The plans, the code and the tests are on GitHub. TrayMath: every guest gets food they can actually eat."
+  }
+]
