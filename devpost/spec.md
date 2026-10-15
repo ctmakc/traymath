@@ -59,7 +59,7 @@ Pure functions, no DOM:
 - `buildGroups(party)` — restricted groups plus the remainder; validates counts.
 - `coverage(menu, party, order)` — a max-flow allocation: source → trays (capacity = quantity × pieces) → compatible groups → sink (capacity = group count × pieces per guest). Groups are connected to the sink one at a time, most constrained first (fewest compatible pieces on the table), with augmenting paths after each; flow on a group's sink edge never decreases once set, so restricted groups keep priority. Returns per group: `need`, `onTable` (compatible pieces in the order, the naive number), `covered` (pieces actually allocated), `short`, `feeds` (tray → pieces), `dishes` (distinct compatible trays in the order), `impossible` (no compatible item on the whole menu); plus totals, spare pieces and price.
 - `suggestFixes(menu, party, order, groupId)` — tries adding 1–5 trays of each compatible item, keeps the smallest quantity that closes the gap (or the best partial), returns the top two by gap closed, then price.
-- `autoPlan(menu, party)` — greedy from an empty order: repeatedly add the single tray with the best weighted shortfall reduction per dollar (restricted shortfall weighted ×3, repeats of the same tray discounted), until no group is short or no tray helps; then a variety pass gives each restricted group a second compatible dish when the menu has one. Deterministic.
+- `autoPlan(menu, party)` — greedy from an empty order: repeatedly add the single tray with the best weighted shortfall reduction per dollar (restricted shortfall weighted ×3, repeats of the same tray discounted, sweet trays capped at `SWEET_SHARE` of the pieces needed), until no group is short or no tray helps; then a variety pass gives each restricted group a second compatible dish when the menu has one; then a trim pass removes any tray the plan no longer needs. Deterministic.
 PRD ref: `prd.md > Coverage board (the kernel)`, `prd.md > Planning trays`.
 
 ### Order link (`src/order-link.js`)
@@ -101,7 +101,8 @@ traymath/
 │   ├── engine.js         # counting engine: compatibility, max-flow coverage, fixes, auto-plan
 │   ├── order-link.js     # state ⇄ URL code
 │   ├── planner.js        # planner view
-│   ├── ticket.js         # kitchen ticket + table labels view
+│   ├── ticket.js         # send panel, kitchen ticket + table labels view
+│   ├── view-helpers.js   # escaping, money, diet pennants, plates
 │   └── styles.css        # design tokens, layouts, print styles
 ├── tests/
 │   ├── engine.test.js    # kernel tests (no double counting, priorities, fixes, auto-plan)

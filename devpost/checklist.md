@@ -9,7 +9,7 @@ Build mode: fast
 
 ## Slices
 
-- [ ] **1. The coverage board tells the truth for a tray order you edit**
+- [x] **1. The coverage board tells the truth for a tray order you edit**
   Becomes usable: The planner opens with the sample party and a starter tray order; − / + on any tray instantly redraws the coverage board, and a group can be short even when the totals look fine.
   Why now: This is the kernel (`scope.md > The Unique Kernel`). If the counting is wrong, nothing else matters, so it is built and tested first, with the page scaffold inside the same slice.
   PRD ref: `prd.md > Coverage board (the kernel)`, `prd.md > The Core Journey` (steps 1, 5, 6)
@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Open the planner, remove the fruit skewers and watch the vegan rows: "enough on paper" stays, "actually theirs" drops, and the row turns short.
   Commit: `Coverage board with max-flow counting`
 
-- [ ] **2. "Plan my trays" proposes an order and short groups get one-click fixes**
+- [x] **2. "Plan my trays" proposes an order and short groups get one-click fixes**
   Becomes usable: One button fills a reasonable order; any short group offers up to two fixes that close the gap when clicked; a menu picker adds any tray.
   Why now: It makes the kernel useful to a host who does not want to do platter maths, and depends only on slice 1.
   PRD ref: `prd.md > Planning trays`, `prd.md > Coverage board (the kernel)` (fixes, variety note)
@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Press "Plan my trays", remove a tray until a row goes short, press the suggested fix.
   Commit: `Auto-plan and fixes`
 
-- [ ] **3. The host describes their own party and it survives a refresh**
+- [x] **3. The host describes their own party and it survives a refresh**
   Becomes usable: Party type, guest count and guest groups (count, diets, allergens) are editable with validation; the plan is in the address, so refresh or copying the address keeps it.
   Why now: Needed before sending; the link format defined here is reused by the ticket in slice 4.
   PRD ref: `prd.md > Party setup`, `prd.md > Guest groups`, `prd.md > States and Boundaries` (persistence, first use)
@@ -39,7 +39,7 @@ Build mode: fast
   Learner check: Add a "1 · Vegan · Gluten-free" group, change guests to 40, reload the page, and see everything still there.
   Commit: `Party editor and plan in the address`
 
-- [ ] **4. The caterer receives a kitchen ticket and prints table labels**
+- [x] **4. The caterer receives a kitchen ticket and prints table labels**
   Becomes usable: "Send to caterer" gives a link and an email; opening it shows the ticket; labels print one per tray; the ticket can reopen in the planner.
   Why now: Closes the core journey end to end (`prd.md > The Core Journey` steps 7–8).
   PRD ref: `prd.md > Sending the order`, `prd.md > Kitchen ticket`
@@ -61,7 +61,7 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 2 (plan, break, fix)
+- [x] Early usable behavior explored — after slice 2 (plan, break, fix): screenshots i1/01–04 reviewed; feedback: label the board columns, bigger plates, numbers in small text too large → done in slice 5
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
@@ -81,3 +81,8 @@ Reflection:
 Activity mode: 
 
 ## Revisions
+
+- Slices 1–4 were implemented in one pass and committed together — the group editor, board, tray list and send panel share one render cycle in `src/planner.js`, so a board-only version would have been throwaway code. Each slice's mechanical verification is a named step in `tests/journey.mjs` or a test in `tests/engine.test.js` / `tests/order-link.test.js`, all passing at that commit.
+- Auto-plan chose three trays of meringues for the sample party — the cheapest pieces per dollar are desserts, so the house rule `SWEET_SHARE = 0.3` (sweet trays at most 30% of pieces needed) was added to `src/menu.js` and the greedy step, plus a trim pass that drops trays the plan no longer needs.
+- The demo moment changed — with most-restricted-first allocation, removing one tray rarely makes a restricted group short; the visible case is two restricted groups competing for the same trays. The sample party's third group became "Vegan · Gluten-free", and `scope.md > What "Working" Looks Like` now describes the reproducible moment (remove fruit skewers and falafel → the vegan gluten-free guest is short 2 with 28 pieces on the table).
+- Added the "On table / Theirs" legend and a `view-helpers.js` module — the screenshots showed the two columns needed a one-line explanation, and both views share the same pennant and plate helpers.

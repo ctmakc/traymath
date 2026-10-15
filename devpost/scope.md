@@ -26,7 +26,7 @@ A calm, dark, kitchen-ticket feel: the clarity of a printed order slip, warm acc
 He runs marketing for a small family party-catering business and sees the enquiries: vague headcounts, restrictions mentioned in passing, and a kitchen that has to guess. He wants a tool real customers can use, and wants to see that a written plan turns into checks he can verify on screen.
 
 ## What "Working" Looks Like
-Open the planner for a demo caterer. Enter 30 guests: 3 vegetarian, 2 vegan, 1 gluten-free and nut-free. Choose "Cocktail party, 2–3 hours". TrayMath proposes a tray order and the coverage board is all green. Remove the fruit skewers: the vegan row turns red and says "short 6 pieces — add Hummus & crudité cups (+12)". Add it back, press "Send to caterer", open the link: the caterer sees the same order as a kitchen ticket with quantities, allergens per tray and printable table labels.
+Open the planner for a demo caterer. Enter 30 guests: 3 vegetarian, 2 vegan, 1 vegan and gluten-free. Choose "Cocktail party, 2–3 hours". Press "Plan my trays": the coverage board is all green. Take away the fruit skewers and the falafel: the vegan gluten-free guest still has 28 pieces "on the table" for the 10 they need, yet turns red, short 2 pieces, because the two vegans need the same trays. TrayMath offers the fix ("Add Fruit skewers +24 pcs"). Press "Send to caterer", open the link: the caterer sees the same order as a kitchen ticket with quantities, allergens per tray and printable table labels.
 The "oh, that's cool" beat: a plan that looks fine by total headcount turns red because the same tray was being counted twice, and TrayMath names the fix.
 
 ## The POC Boundary
