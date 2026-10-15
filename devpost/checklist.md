@@ -1,0 +1,90 @@
+---
+doc: checklist
+status: approved
+---
+
+# Build Checklist
+
+Build mode: fast
+
+## Slices
+
+- [x] **1. The coverage board tells the truth for a tray order you edit**
+  Becomes usable: The planner opens with the sample party and a starter tray order; − / + on any tray instantly redraws the coverage board, and a group can be short even when the totals look fine.
+  Why now: This is the kernel (`scope.md > The Unique Kernel`). If the counting is wrong, nothing else matters, so it is built and tested first, with the page scaffold inside the same slice.
+  PRD ref: `prd.md > Coverage board (the kernel)`, `prd.md > The Core Journey` (steps 1, 5, 6)
+  Spec ref: `spec.md > Menu data (src/menu.js)`, `spec.md > Counting engine (src/engine.js)`, `spec.md > Planner view (src/planner.js)`, `spec.md > App shell (src/app.js, index.html, src/styles.css)`, `spec.md > File Structure`
+  Build: Scaffold files per the spec, sample menu and party rules, `compatible`, `buildGroups`, max-flow `coverage`, planner with tray list (− / +, remove) and coverage board (need, on paper, actually theirs, short, feeds), base tokens and layout from `DESIGN.md`.
+  Verify (mechanical): `npm test` passes engine tests for: no double counting (a tray shared by two groups that each look fine alone), restricted groups served first, impossible group, spare pieces; Playwright opens the page with no console errors and the board shows the sample party's rows.
+  Learner check: Open the planner, remove the fruit skewers and watch the vegan rows: "enough on paper" stays, "actually theirs" drops, and the row turns short.
+  Commit: `Coverage board with max-flow counting`
+
+- [x] **2. "Plan my trays" proposes an order and short groups get one-click fixes**
+  Becomes usable: One button fills a reasonable order; any short group offers up to two fixes that close the gap when clicked; a menu picker adds any tray.
+  Why now: It makes the kernel useful to a host who does not want to do platter maths, and depends only on slice 1.
+  PRD ref: `prd.md > Planning trays`, `prd.md > Coverage board (the kernel)` (fixes, variety note)
+  Spec ref: `spec.md > Counting engine (src/engine.js)` (`suggestFixes`, `autoPlan`), `spec.md > Planner view (src/planner.js)`
+  Build: `autoPlan` greedy with variety pass, `suggestFixes`, fix buttons on short rows, variety note, menu picker, summary line ("Everyone is covered · 18 spare pieces · $412").
+  Verify (mechanical): Engine tests: auto-plan covers the sample party and every restricted group has ≥2 dishes; auto-plan stops when covered; a fix closes the gap it targets. Playwright: click "Plan my trays", board all covered.
+  Learner check: Press "Plan my trays", remove a tray until a row goes short, press the suggested fix.
+  Commit: `Auto-plan and fixes`
+
+- [x] **3. The host describes their own party and it survives a refresh**
+  Becomes usable: Party type, guest count and guest groups (count, diets, allergens) are editable with validation; the plan is in the address, so refresh or copying the address keeps it.
+  Why now: Needed before sending; the link format defined here is reused by the ticket in slice 4.
+  PRD ref: `prd.md > Party setup`, `prd.md > Guest groups`, `prd.md > States and Boundaries` (persistence, first use)
+  Spec ref: `spec.md > Order link (src/order-link.js)`, `spec.md > Data Model`, `spec.md > Planner view (src/planner.js)`
+  Build: Party controls, group editor (add / edit / remove), remainder group, validation messages, `encode` / `decode` with strict validation, `#plan=` mirroring and restore on load.
+  Verify (mechanical): `order-link` tests (round trip, malformed codes return null, unknown tray ids rejected); Playwright: edit a group, reload, same state; restricted > total shows the error and disables planning.
+  Learner check: Add a "1 · Vegan · Gluten-free" group, change guests to 40, reload the page, and see everything still there.
+  Commit: `Party editor and plan in the address`
+
+- [x] **4. The caterer receives a kitchen ticket and prints table labels**
+  Becomes usable: "Send to caterer" gives a link and an email; opening it shows the ticket; labels print one per tray; the ticket can reopen in the planner.
+  Why now: Closes the core journey end to end (`prd.md > The Core Journey` steps 7–8).
+  PRD ref: `prd.md > Sending the order`, `prd.md > Kitchen ticket`
+  Spec ref: `spec.md > Kitchen ticket view (src/ticket.js)`, `spec.md > Order link (src/order-link.js)`, `spec.md > Important Failure Modes`
+  Build: Send panel (host, date, note, short-group warning, copy link with fallback, mailto), ticket view, label print mode, "Open in planner", incomplete-link state.
+  Verify (mechanical): Playwright: send → open link in a new page → ticket shows the same trays and groups; label print mode renders one label per tray (print-media screenshot); a truncated link shows the incomplete state.
+  Learner check: Send the order, open the link, press "Print table labels" and look at the preview.
+  Commit: `Kitchen ticket and table labels`
+
+- [x] **5. It looks and moves like TrayMath on a laptop and a phone**
+  Becomes usable: Finished visual design from `DESIGN.md`, phone layout, motion, focus states, contrast checked.
+  Why now: Behaviour is complete, so the polish pass cannot be undone by later feature work.
+  PRD ref: `prd.md > Look and Feel`, `prd.md > Screens and Layout`
+  Spec ref: `spec.md > Look and Feel`, `spec.md > App shell (src/app.js, index.html, src/styles.css)`
+  Build: Screenshot-critique loop (desktop hero, scrolled, phone; at least two rounds), dot-drop motion with reduced-motion fallback, pinned summary on phone, contrast and anti-slop gates.
+  Verify (mechanical): contrast gate passes; no horizontal scroll at 390 px; Playwright journey still passes; screenshots reviewed for each round.
+  Learner check: Open it on a phone and run the whole journey once.
+  Commit: `Visual design, phone layout and motion`
+
+## Hands-on Checkpoints
+
+- [x] Early usable behavior explored — after slice 2 (plan, break, fix): screenshots i1/01–04 reviewed; feedback: label the board columns, bigger plates, numbers in small text too large → done in slice 5
+- [x] Final kick-the-tires exploration and feedback completed — on the live URL (https://traymath.pages.dev) at 1440 and 390 px: full journey, awkward inputs (guests 0/301/empty, restricted > total, cut-off link, clipboard fallback path); the owner delegated hands-on review to the agent for this build
+
+## Final Review
+
+- [x] Mobile fix buttons centred their text when wrapping → left-aligned (`.fix`), verified on the 390 px screenshot
+- [x] Final review complete — feedback resolved; ready to ship (owner's standing instruction: build, verify and submit)
+
+## Code Tour and App Map
+
+- [x] Learning activity complete — focused alternative: prior practice connected (criterion → named test → revision)
+- [x] Optional edit and transfer reflection addressed — not applicable (delegated build, no live session)
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+
+Activity and evidence: the learner's question "how do I know the plan was followed without reading the code?" (spec > Decisions and Open Issues) is answered by `tests/engine.test.js` test names mirroring PRD criteria and `tests/journey.mjs` steps; the demo-moment revision (Revisions, bullet 3) is the real project moment.
+Route and stops: reference route in `devpost/app-map.html`: `src/planner.js` case 'plan' → `src/engine.js` autoPlan()/coverage() → `src/planner.js` renderBoard(); not toured live.
+Edit outcome: not applicable
+Reflection: not offered (no live session)
+Activity mode: focused alternative, recorded as a recap of prior practice
+
+## Revisions
+
+- Slices 1–4 were implemented in one pass and committed together — the group editor, board, tray list and send panel share one render cycle in `src/planner.js`, so a board-only version would have been throwaway code. Each slice's mechanical verification is a named step in `tests/journey.mjs` or a test in `tests/engine.test.js` / `tests/order-link.test.js`, all passing at that commit.
+- Auto-plan chose three trays of meringues for the sample party — the cheapest pieces per dollar are desserts, so the house rule `SWEET_SHARE = 0.3` (sweet trays at most 30% of pieces needed) was added to `src/menu.js` and the greedy step, plus a trim pass that drops trays the plan no longer needs.
+- The demo moment changed — with most-restricted-first allocation, removing one tray rarely makes a restricted group short; the visible case is two restricted groups competing for the same trays. The sample party's third group became "Vegan · Gluten-free", and `scope.md > What "Working" Looks Like` now describes the reproducible moment (remove fruit skewers and falafel → the vegan gluten-free guest is short 2 with 28 pieces on the table).
+- Added the "On table / Theirs" legend and a `view-helpers.js` module — the screenshots showed the two columns needed a one-line explanation, and both views share the same pennant and plate helpers.
+- Allocation now spends the narrowest trays first (trays that suit the fewest groups) — the first screenshots showed vegetarians "fed by" vegan fruit skewers while caprese went to everyone; totals were right but the ticket read wrong to a kitchen. Ordering the search keeps widely-edible trays for the guests who need them; trays still display in menu order.
