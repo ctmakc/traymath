@@ -1,0 +1,18 @@
+# Personal learning context stays out of commits (Devpost Learn 1-start)
+/devpost/learner-profile.md
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Installed Skill Pack copies (reinstall with: npx skills add challengepost/learn-ai-basics --all -y)
+/.agents/
+/.claude/
+/agent/
+
+# Local tooling output
+node_modules/
+/test-results/
+/video/out/
+.DS_Store
