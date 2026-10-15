@@ -149,6 +149,7 @@ export function mountPlanner(root, initial, { onChange, onSend } = {}) {
     if (cov.valid) {
       html += `<p class="board-legend">${hasOrder ? '<b>On table</b>: pieces in the order this group can eat. <b>Theirs</b>: what is left for them once every group is served, most restricted first. One plate = one guest.' : 'Each row is a group of guests. One plate = one guest.'}</p>`;
       html += `<div class="board-cols" aria-hidden="true"><span>Group</span><span>Need</span><span>On table</span><span>Theirs</span></div>`;
+      let plateIndex = 0;
       for (const g of cov.groups) {
         const fixes = hasOrder && g.short > 0 && !g.impossible ? suggestFixes(MENU, state, state.order, g.id) : [];
         const feeds = Object.entries(g.feeds).map(([id, n]) => `<b>${esc(menuById[id].name)}</b> <span class="num">${n}</span>`).join(' · ');
@@ -159,7 +160,7 @@ export function mountPlanner(root, initial, { onChange, onSend } = {}) {
           <span class="num dim" title="Pieces in the order this group can eat">${hasOrder ? g.onTable : '–'}</span>
           <span class="num theirs" title="Pieces actually theirs after everyone is served">${hasOrder ? g.covered : '–'}</span>
           <div class="grow-detail">
-            ${hasOrder ? plates(g, cov.piecesPerGuest, animateNext && !reduceMotion()).replace(/<i class="plate([^"]*)" style="([^"]*)--i:(\d+)"/g, (m, c, st, i) => `<i class="plate${c}" data-k="${g.id}-${i}" style="${st}--i:${i}"`) : ''}
+            ${hasOrder ? plates(g, cov.piecesPerGuest, animateNext && !reduceMotion(), (plateIndex += g.count) - g.count).replace(/<i class="plate([^"]*)" style="([^"]*)--i:(\d+)"/g, (m, c, st, i) => `<i class="plate${c}" data-k="${g.id}-${Number(i) - plateIndex + g.count}" style="${st}--i:${i}"`) : ''}
             ${g.impossible ? `<p class="flag-line short">No dish on this menu suits ${esc(g.name)}. Ask ${esc(CATERER.name)} what they can make.</p>` : ''}
             ${hasOrder && g.short > 0 && !g.impossible ? `<p class="flag-line short">Short <span class="num">${g.short}</span> pieces${g.fooledByTotals ? ` — enough on paper (<span class="num">${g.onTable}</span>), but other guests need those trays too` : ''}</p>
               ${fixes.length ? `<div class="fix-row">${fixes.map((f) => `<button type="button" class="fix" data-act="fix" data-id="${f.itemId}" data-qty="${f.qty}" data-key="fix-${g.id}-${f.itemId}">Add ${f.qty > 1 ? `${f.qty} × ` : ''}${esc(f.name)} <span class="num">+${f.pieces} pcs · ${money(f.cost)}</span></button>`).join('')}</div>` : ''}` : ''}

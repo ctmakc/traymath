@@ -25,3 +25,5 @@ Motion personality: "pieces placed on a tray" — dots arrive with a short drop 
 Signature elements: (1) piece-dots split per tray (dots coloured by the tray that feeds them, hollow when missing); (2) food-pick pennant diet tags; (3) "enough on paper / actually theirs" double column; (4) printable tent-card labels with a fold line; (5) the ticket's perforated tear edge.
 Ledger check: differs from every row on ≥3 axes — font (Recursive is unused in the ledger), signature (piece-dot split), motion (dot drop placement); background family and amber-like accent overlap with some dark tool rows, which is allowed by the rule.
 Forbidden here: gradients, glass, glow, emoji icons, cards-in-cards, centered hero with badge, uniform fade-up, pure black/white, more than one accent.
+
+Gate notes: `sloplint` P2 "pure white" hits are print-only (`@media print`, paper output); screen tokens never use #fff/#000. Contrast gate: CONTRAST OK. Screenshot loop: 3 rounds (i1 → i3), desktop 1440, phone 390, ticket, print labels, plate-drop frames.

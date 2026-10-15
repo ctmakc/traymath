@@ -49,7 +49,7 @@ Build mode: fast
   Learner check: Send the order, open the link, press "Print table labels" and look at the preview.
   Commit: `Kitchen ticket and table labels`
 
-- [ ] **5. It looks and moves like TrayMath on a laptop and a phone**
+- [x] **5. It looks and moves like TrayMath on a laptop and a phone**
   Becomes usable: Finished visual design from `DESIGN.md`, phone layout, motion, focus states, contrast checked.
   Why now: Behaviour is complete, so the polish pass cannot be undone by later feature work.
   PRD ref: `prd.md > Look and Feel`, `prd.md > Screens and Layout`
@@ -86,3 +86,4 @@ Activity mode:
 - Auto-plan chose three trays of meringues for the sample party — the cheapest pieces per dollar are desserts, so the house rule `SWEET_SHARE = 0.3` (sweet trays at most 30% of pieces needed) was added to `src/menu.js` and the greedy step, plus a trim pass that drops trays the plan no longer needs.
 - The demo moment changed — with most-restricted-first allocation, removing one tray rarely makes a restricted group short; the visible case is two restricted groups competing for the same trays. The sample party's third group became "Vegan · Gluten-free", and `scope.md > What "Working" Looks Like` now describes the reproducible moment (remove fruit skewers and falafel → the vegan gluten-free guest is short 2 with 28 pieces on the table).
 - Added the "On table / Theirs" legend and a `view-helpers.js` module — the screenshots showed the two columns needed a one-line explanation, and both views share the same pennant and plate helpers.
+- Allocation now spends the narrowest trays first (trays that suit the fewest groups) — the first screenshots showed vegetarians "fed by" vegan fruit skewers while caprese went to everyone; totals were right but the ticket read wrong to a kitchen. Ordering the search keeps widely-edible trays for the guests who need them; trays still display in menu order.

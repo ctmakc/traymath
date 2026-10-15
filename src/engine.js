@@ -118,9 +118,14 @@ function augmentAll(g, s, t) {
 export function coverage(menu, party, order) {
   const built = buildGroups(party);
   const { groups, piecesPerGuest } = built;
+  // Trays that suit the fewest groups come first, so the search spends them
+  // first and keeps widely-edible trays (vegan, allergen-free) for the guests
+  // who need them. Totals are the same either way; the "fed by" lists read better.
+  const reach = (m) => groups.filter((gr) => compatible(m, gr)).length;
   const trays = menu
     .filter((m) => (order[m.id] || 0) > 0)
-    .map((m) => ({ item: m, qty: order[m.id], pieces: order[m.id] * m.pieces }));
+    .map((m) => ({ item: m, qty: order[m.id], pieces: order[m.id] * m.pieces, reach: reach(m) }))
+    .sort((a, b) => a.reach - b.reach);
 
   // nodes: 0 = source, 1..T = trays, T+1..T+G = groups, last = sink
   const T = trays.length;
@@ -166,7 +171,7 @@ export function coverage(menu, party, order) {
       }
     });
     return { id: tr.item.id, item: tr.item, qty: tr.qty, pieces: tr.pieces, feeds, unused: tr.pieces - used };
-  });
+   }).sort((a, b) => menu.indexOf(a.item) - menu.indexOf(b.item));
 
   const groupRows = rows.map((row) => {
     const feeds = {};

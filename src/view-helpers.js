@@ -34,7 +34,7 @@ export function suitsText(item) {
 }
 
 /** Plates: one per guest, filled by the share of their pieces actually covered. */
-export function plates(row, ppg, animate) {
+export function plates(row, ppg, animate, start = 0) {
   const max = 120;
   const n = Math.min(row.count, max);
   let left = row.covered;
@@ -43,7 +43,7 @@ export function plates(row, ppg, animate) {
     const fill = ppg ? Math.max(0, Math.min(1, left / ppg)) : 1;
     left -= ppg;
     const cls = fill >= 1 ? 'plate' : fill > 0 ? 'plate part' : 'plate empty';
-    html += `<i class="${cls}${animate ? ' anim' : ''}" style="--fill:${fill.toFixed(3)};--i:${i}"></i>`;
+    html += `<i class="${cls}${animate ? ' anim' : ''}" style="--fill:${fill.toFixed(3)};--i:${start + i}"></i>`;
   }
   const more = row.count > max ? `<span class="hint">+${row.count - max} more guests</span>` : '';
   return `<div class="plates" role="img" aria-label="${row.count} guests, ${row.covered} of ${row.need} pieces covered">${html}${more}</div>`;
