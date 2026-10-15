@@ -1,6 +1,6 @@
 # TrayMath
 
-**Party platters planned by diet, not by head.** A host enters how many guests are coming and who has restrictions; TrayMath builds a tray order from the caterer's menu, shares every tray's pieces out between the guest groups (most restricted first, so no tray is counted twice), shows who is short and by how much, and hands the caterer a kitchen ticket with printable table labels.
+**Party platters planned by diet.** A host enters how many guests are coming and who has restrictions; TrayMath builds a tray order from the caterer's menu, shares every tray's pieces out between the guest groups (most restricted first, so no tray is counted twice), shows who is short and by how much, and hands the caterer a kitchen ticket with printable table labels.
 
 Live demo: https://traymath.pages.dev (fictional caterer "Juniper Table"; menu, prices and labels are sample data)
 
