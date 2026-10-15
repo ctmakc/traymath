@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrayMath — app map</title>
+<style>
+  :root { --pan:#13191D; --raised:#1A2227; --seam:#2F3B42; --rice:#E8EDE9; --steam:#9DAAB0; --saffron:#F2B544; --basil:#6FCF8E; --radish:#FF6F7F; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--pan); color: var(--rice); font: 16px/1.55 ui-sans-serif, system-ui, sans-serif; padding: 32px clamp(16px, 4vw, 48px) 64px; max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 30px; line-height: 1.15; margin-bottom: 8px; }
+  h2 { font-size: 19px; margin: 34px 0 10px; }
+  p, li { color: var(--steam); max-width: 72ch; }
+  p b, li b { color: var(--rice); }
+  code { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--saffron); }
+  ol, ul { padding-left: 22px; display: grid; gap: 8px; }
+  .stop { background: var(--raised); padding: 14px 16px; margin: 10px 0; border-left: 3px solid var(--saffron); }
+  .stop h3 { font-size: 16px; margin-bottom: 4px; }
+  details { background: var(--raised); padding: 10px 14px; margin: 8px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  svg { width: 100%; height: auto; margin: 8px 0; }
+  .fine { font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>TrayMath app map</h1>
+<p>A one-page guide to how TrayMath is put together, written from the finished code (commit noted at the bottom). It is a snapshot: if the code changes, the line numbers drift; the function names stay useful.</p>
+
+<h2>What the app is</h2>
+<p>One web page with two views. The <b>planner</b> is where a host describes the party and edits a tray order; the <b>kitchen ticket</b> is what the caterer opens from the link. Both ask the same <b>counting engine</b>, which shares each tray's pieces out between guest groups so no tray is counted twice. The order is stored in the page address, nowhere else.</p>
+
+<h2>One action, end to end: “Plan my trays”</h2>
+<svg viewBox="0 0 900 190" role="img" aria-label="Click Plan my trays, planner.js calls autoPlan, autoPlan calls coverage repeatedly, renderBoard draws the result">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9DAAB0"/></marker></defs>
+  <g font-family="ui-sans-serif, system-ui" font-size="14">
+    <rect x="10" y="60" width="170" height="70" fill="#1A2227" stroke="#F2B544"/><text x="95" y="90" fill="#E8EDE9" text-anchor="middle">Click</text><text x="95" y="110" fill="#F2B544" text-anchor="middle">Plan my trays</text>
+    <rect x="235" y="60" width="190" height="70" fill="#1A2227" stroke="#2F3B42"/><text x="330" y="90" fill="#E8EDE9" text-anchor="middle">src/planner.js</text><text x="330" y="110" fill="#9DAAB0" text-anchor="middle">case 'plan'</text>
+    <rect x="480" y="10" width="190" height="70" fill="#1A2227" stroke="#2F3B42"/><text x="575" y="40" fill="#E8EDE9" text-anchor="middle">src/engine.js</text><text x="575" y="60" fill="#9DAAB0" text-anchor="middle">autoPlan()</text>
+    <rect x="480" y="110" width="190" height="70" fill="#1A2227" stroke="#2F3B42"/><text x="575" y="140" fill="#E8EDE9" text-anchor="middle">src/engine.js</text><text x="575" y="160" fill="#9DAAB0" text-anchor="middle">coverage() · max flow</text>
+    <rect x="725" y="60" width="165" height="70" fill="#1A2227" stroke="#6FCF8E"/><text x="807" y="90" fill="#E8EDE9" text-anchor="middle">Board redraws</text><text x="807" y="110" fill="#6FCF8E" text-anchor="middle">renderBoard()</text>
+    <path d="M180 95H232" stroke="#9DAAB0" marker-end="url(#a)"/>
+    <path d="M425 85L478 50" stroke="#9DAAB0" marker-end="url(#a)"/>
+    <path d="M575 80V108" stroke="#9DAAB0" marker-end="url(#a)"/><text x="585" y="99" fill="#9DAAB0" font-size="12">tries each tray</text>
+    <path d="M670 145L722 110" stroke="#9DAAB0" marker-end="url(#a)"/>
+  </g>
+</svg>
+<p class="fine">Reference route (not toured live with the learner): follow it in an editor with the app open.</p>
+
+<div class="stop"><h3>1 · The click — <code>src/planner.js</code>, search <code>case 'plan':</code></h3>
+<p>One click listener on the whole planner reads <code>data-act</code> from the button. For <code>plan</code> it checks the party is valid with <code>buildGroups(state)</code>, replaces <code>state.order</code> with <code>autoPlan(MENU, state)</code>, and calls <code>render()</code>.</p></div>
+
+<div class="stop"><h3>2 · The counting — <code>src/engine.js</code>, <code>coverage()</code> and <code>autoPlan()</code></h3>
+<p><code>coverage()</code> builds a small network: source → each tray (capacity = its pieces) → every group that can eat it → sink (capacity = what the group needs). It connects groups to the sink one at a time, most constrained first, and pushes flow after each, so restricted guests keep their pieces. The result per group is <code>need</code>, <code>onTable</code> (naive count), <code>covered</code> (actually theirs) and <code>short</code>. <code>autoPlan()</code> just tries “one more of each tray” and keeps the best, using <code>coverage()</code> as the judge.</p></div>
+
+<div class="stop"><h3>3 · The result on screen — <code>src/planner.js</code>, <code>function renderBoard</code></h3>
+<p>Draws one row per group: the three numbers, one plate per guest (<code>plates()</code> in <code>src/view-helpers.js</code>), the short line and up to two fixes from <code>suggestFixes()</code>. The same <code>render()</code> then writes the plan into the address through <code>encode()</code> in <code>src/order-link.js</code>.</p></div>
+
+<h2>To change this, start here</h2>
+<ul>
+  <li><b>Menu, prices, labels:</b> <code>MENU</code> in <code>src/menu.js</code>. Each tray lists the diets it suits and the allergens it contains.</li>
+  <li><b>How much each guest eats:</b> <code>PARTY_TYPES</code> (<code>piecesPerGuest</code>) and <code>SWEET_SHARE</code> in <code>src/menu.js</code>.</li>
+  <li><b>Who can eat what:</b> <code>compatible()</code> in <code>src/engine.js</code>.</li>
+  <li><b>Colours and type:</b> tokens at the top of <code>src/styles.css</code>; direction in <code>DESIGN.md</code>.</li>
+  <li><b>The caterer's ticket and labels:</b> <code>mountTicket()</code> in <code>src/ticket.js</code>; label print styles at the bottom of <code>src/styles.css</code>.</li>
+</ul>
+
+<h2>A practice to reuse</h2>
+<p><b>Turn each acceptance criterion into a named check.</b> The PRD line “the same tray is never counted twice” became the test <code>the same tray is never counted twice (enough on paper, short in reality)</code> in <code>tests/engine.test.js</code>, and a browser step in <code>tests/journey.mjs</code>. When the first demo idea (“remove the fruit skewers and the vegans go short”) turned out not to happen, running the engine on the sample party showed it before any screen existed, and the plan was revised on paper (<code>devpost/checklist.md &gt; Revisions</code>) before the demo was recorded. On any project: write the criterion so it can be checked by looking, then make the check run with one command.</p>
+
+<details><summary>Run it again</summary>
+<p><code>python3 -m http.server 47811</code> in the project folder, open <code>http://localhost:47811/</code>. Tests: <code>npm test</code>; browser journey: <code>node tests/journey.mjs http://localhost:47811/</code>.</p></details>
+
+<p class="fine" style="margin-top:28px">Map written from commit <code>b9aaa4d</code> plus the README/app-map commit that follows it.</p>
+</body>
+</html>

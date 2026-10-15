@@ -62,23 +62,24 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 2 (plan, break, fix): screenshots i1/01–04 reviewed; feedback: label the board columns, bigger plates, numbers in small text too large → done in slice 5
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed — on the live URL (https://traymath.pages.dev) at 1440 and 390 px: full journey, awkward inputs (guests 0/301/empty, restricted > total, cut-off link, clipboard fallback path); the owner delegated hands-on review to the agent for this build
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Mobile fix buttons centred their text when wrapping → left-aligned (`.fix`), verified on the 390 px screenshot
+- [x] Final review complete — feedback resolved; ready to ship (owner's standing instruction: build, verify and submit)
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — focused alternative: prior practice connected (criterion → named test → revision)
+- [x] Optional edit and transfer reflection addressed — not applicable (delegated build, no live session)
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: 
-Route and stops: 
-Edit outcome: 
-Reflection: 
-Activity mode: 
+Activity and evidence: the learner's question "how do I know the plan was followed without reading the code?" (spec > Decisions and Open Issues) is answered by `tests/engine.test.js` test names mirroring PRD criteria and `tests/journey.mjs` steps; the demo-moment revision (Revisions, bullet 3) is the real project moment.
+Route and stops: reference route in `devpost/app-map.html`: `src/planner.js` case 'plan' → `src/engine.js` autoPlan()/coverage() → `src/planner.js` renderBoard(); not toured live.
+Edit outcome: not applicable
+Reflection: not offered (no live session)
+Activity mode: focused alternative, recorded as a recap of prior practice
 
 ## Revisions
 
